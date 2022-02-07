@@ -95,4 +95,27 @@ describe('lru', () => {
     storage.removeData('data-6');
     expect(storage.size()).toBe(3);
   });
+
+  it('should be able to set new values for existing keys', () => {
+    const storage = new LRUStorage(3);
+
+    expect(storage.setData('data-1', 'value-1')).toBeTruthy();
+    expect(storage.setData('data-2', 'value-2')).toBeTruthy();
+    expect(storage.setData('data-3', 'value-3')).toBeTruthy();
+    expect(storage.setData('data-1', 'value-1.1')).toBeTruthy();
+    expect(storage.setData('data-2', 'value-2.1')).toBeTruthy();
+
+    expect(storage.getData('data-1')).toBe('value-1.1');
+    expect(storage.getData('data-2')).toBe('value-2.1');
+    expect(storage.getData('data-3')).toBe('value-3');
+
+    expect(storage.setData('data-3', 'value-3.1')).toBeTruthy();
+    expect(storage.setData('data-1', 'value-1.2')).toBeTruthy();
+
+    expect(storage.getData('data-1')).toBe('value-1.2');
+    expect(storage.getData('data-2')).toBe('value-2.1');
+    expect(storage.getData('data-3')).toBe('value-3.1');
+
+    expect(storage.size()).toBe(3);
+  });
 });

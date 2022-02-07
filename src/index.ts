@@ -15,7 +15,7 @@ export default class LRUStorage {
     if (this.cache.has(key)) {
       const data = this.cache.get(key);
       this.cache.delete(key);
-      data.cache.value = value;
+      data.value = value;
       this.cache.set(key, data);
     } else {
       this.cache.set(key, {

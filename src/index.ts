@@ -7,6 +7,10 @@ export default class LRUStorage {
     this.cache = new Map();
   }
 
+  size() {
+    return this.cache.size;
+  }
+
   setData(key: string, value: any) {
     if (this.cache.has(key)) {
       const data = this.cache.get(key);

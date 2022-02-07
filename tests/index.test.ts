@@ -60,8 +60,8 @@ describe('lru', () => {
     expect(storage.setData('data-1', 'value-1')).toBeTruthy();
     expect(storage.setData('data-2', 'value-2')).toBeTruthy();
 
-    storage.makePersistent('data-1');
-    storage.makePersistent('data-2');
+    storage.setPersistent('data-1');
+    storage.setPersistent('data-2');
 
     expect(storage.setData('data-3', 'value-3')).toBeTruthy();
     expect(storage.setData('data-4', 'value-4')).toBeTruthy();
@@ -115,6 +115,22 @@ describe('lru', () => {
     expect(storage.getData('data-1')).toBe('value-1.2');
     expect(storage.getData('data-2')).toBe('value-2.1');
     expect(storage.getData('data-3')).toBe('value-3.1');
+
+    expect(storage.size()).toBe(3);
+  });
+
+  it('should return false in case of it is not possible to add new item within the storage', () => {
+    const storage = new LRUStorage(3);
+
+    expect(storage.setData('data-1', 'value-1'));
+    expect(storage.setData('data-2', 'value-2'));
+    expect(storage.setData('data-3', 'value-3'));
+
+    storage.setPersistent('data-1');
+    storage.setPersistent('data-2');
+    storage.setPersistent('data-3');
+
+    expect(storage.setData('data-4', 'value-4')).toBeFalsy();
 
     expect(storage.size()).toBe(3);
   });

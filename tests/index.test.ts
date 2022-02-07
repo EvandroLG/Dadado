@@ -134,4 +134,27 @@ describe('lru', () => {
 
     expect(storage.size()).toBe(3);
   });
+
+  it('should support any type as key and value', () => {
+    const storage = new LRUStorage(7);
+    const obj = {};
+    const arr: any = [];
+    const fn = function () {};
+
+    expect(storage.setData(1, 'value-1')).toBeTruthy();
+    expect(storage.setData(obj, 200)).toBeTruthy();
+    expect(storage.setData(null, obj)).toBeTruthy();
+    expect(storage.setData(arr, null)).toBeTruthy();
+    expect(storage.setData(undefined, arr)).toBeTruthy();
+    expect(storage.setData(fn, undefined)).toBeTruthy();
+    expect(storage.setData(10, fn)).toBeTruthy();
+
+    expect(storage.getData(1)).toBe('value-1');
+    expect(storage.getData(obj)).toBe(200);
+    expect(storage.getData(null)).toBe(obj);
+    expect(storage.getData(arr)).toBe(null);
+    expect(storage.getData(undefined)).toBe(arr);
+    expect(storage.getData(fn)).toBe(undefined);
+    expect(storage.getData(10)).toBe(fn);
+  });
 });

@@ -1,6 +1,11 @@
-export default class LRUStorage {
+type DataType<T> = {
+  persistent: boolean,
+  value: T,
+};
+
+export default class LRUStorage<T> {
   capacity: number;
-  private cache: any;
+  private cache: Map<T, DataType<T>>;
 
   constructor(capacity: number) {
     this.capacity = capacity;
@@ -11,9 +16,9 @@ export default class LRUStorage {
     return this.cache.size;
   }
 
-  setData(key: string, value: any) {
+  setData(key: T, value: T) {
     if (this.cache.has(key)) {
-      const data = this.cache.get(key);
+      const data = this.cache.get(key) as DataType<T>;
       this.cache.delete(key);
       data.value = value;
       this.cache.set(key, data);
@@ -35,11 +40,11 @@ export default class LRUStorage {
 
       while (!wasDeleted && this.cache.size) {
         const key = keys.shift();
-        const item = this.cache.get(key);
+        const item = this.cache.get(key as T) as DataType<T>;
 
         if (!item.persistent) {
           wasDeleted = true;
-          this.cache.delete(key);
+          this.cache.delete(key as T);
         }
       }
     }
@@ -51,37 +56,38 @@ export default class LRUStorage {
     return true;
   }
 
-  getData(key: string) {
+  getData(key: T) {
     if (!this.cache.has(key)) {
       return;
     }
 
-    const data = this.cache.get(key);
+    const data = this.cache.get(key) as DataType<T>;
     this.cache.delete(key);
     this.cache.set(key, data);
 
     return data.value;
   }
 
-  removeData(key: string) {
+  removeData(key: T) {
     return this.cache.delete(key);
   }
 
-  setPersistent(key: string) {
+  setPersistent(key: T) {
     if (this.cache.has(key)) {
-      this.cache.get(key).persistent = true;
+      (this.cache.get(key) as DataType<T>).persistent = true;
     }
   }
 
-  removePersistent(key: string) {
+  removePersistent(key: T) {
     if (this.cache.has(key)) {
-      this.cache.get(key).persistent = false;
+      (this.cache.get(key) as DataType<T>).persistent = false;
     }
   }
 
-  togglePersistent(key: string) {
+  togglePersistent(key: T) {
     if (this.cache.has(key)) {
-      this.cache.get(key).persistent = !this.cache.get(key).persistent;
+      const data = this.cache.get(key) as DataType<T>;
+      data.persistent = !data.persistent;
     }
   }
 }

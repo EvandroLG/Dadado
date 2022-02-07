@@ -1,5 +1,5 @@
-class LRUStorage {
-  private capacity: number;
+export default class LRUStorage {
+  capacity: number;
   private cache: any;
 
   constructor(capacity: number) {
@@ -22,7 +22,7 @@ class LRUStorage {
 
     const keys = Array.from(this.cache.keys());
 
-    while (this.cache.size < this.capacity) {
+    while (this.cache.size > this.capacity) {
       let wasDeleted = false;
 
       if (!this.cache.size) {
@@ -56,7 +56,7 @@ class LRUStorage {
     this.cache.delete(key);
     this.cache.set(key, data);
 
-    return data;
+    return data.value;
   }
 
   removeData(key: string) {

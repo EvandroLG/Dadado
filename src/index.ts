@@ -67,9 +67,21 @@ export default class LRUStorage {
     return this.cache.delete(key);
   }
 
-  makePersistent(key: string) {
+  setPersistent(key: string) {
     if (this.cache.has(key)) {
       this.cache.get(key).persistent = true;
+    }
+  }
+
+  removePersistent(key: string) {
+    if (this.cache.has(key)) {
+      this.cache.get(key).persistent = false;
+    }
+  }
+
+  togglePersistent(key: string) {
+    if (this.cache.has(key)) {
+      this.cache.get(key).persistent = !this.cache.get(key).persistent;
     }
   }
 }

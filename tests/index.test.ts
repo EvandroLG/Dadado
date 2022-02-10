@@ -1,6 +1,17 @@
 import Storage from '../src/';
 
 describe('lru', () => {
+  it('should throw an error if `capacity` is not an integer or a positive number', () => {
+    const errorIntegerNumber = 'Expected an integer number';
+    const errorPositiveNumber = 'Expected a positive number greater or equal to 1';
+
+    expect(() => new Storage(3.3)).toThrowError(errorIntegerNumber);
+    expect(() => new Storage(1222.23)).toThrowError(errorIntegerNumber);
+    expect(() => new Storage(0)).toThrowError(errorPositiveNumber);
+    expect(() => new Storage(-86)).toThrowError(errorPositiveNumber);
+    expect(() => new Storage(-1020)).toThrowError(errorPositiveNumber);
+  });
+
   it('should be able to set the storage capacity', () => {
     const storage = new Storage(10);
     expect(storage.capacity).toBe(10);
@@ -183,6 +194,7 @@ describe('lru', () => {
 
     storage.setData('data-1', 'value-1');
     storage.setData(obj, [1, 2, 3]);
+    storage.setPersistent(obj);
     storage.setData(123, 'value-3');
     storage.clear();
 

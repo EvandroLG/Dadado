@@ -11,6 +11,14 @@ export default class Storage<T> {
    * @param {number} capacity - Defines the maximum of items that can be in the cache
   */
   constructor(capacity: number) {
+    if (!Number.isInteger(capacity)) {
+      throw Error('Expected an integer number');
+    }
+
+    if (Math.sign(capacity) <= 0) {
+      throw Error('Expected a positive number greater or equal to 1');
+    }
+
     this.capacity = capacity;
     this.cache = new Map();
   }

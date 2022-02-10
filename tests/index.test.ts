@@ -176,4 +176,19 @@ describe('lru', () => {
 
     expect(storage.contains(1)).toBeTruthy();
   });
+
+  it('should remove all items from the storage', () => {
+    const storage = new Storage(3);
+    const obj = {};
+
+    storage.setData('data-1', 'value-1');
+    storage.setData(obj, [1, 2, 3]);
+    storage.setData(123, 'value-3');
+    storage.clear();
+
+    expect(storage.size()).toBe(0);
+    expect(storage.getData('data-1')).toBeUndefined();
+    expect(storage.getData(obj)).toBeUndefined();
+    expect(storage.getData(123)).toBeUndefined();
+  });
 });

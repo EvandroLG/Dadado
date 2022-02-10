@@ -16,12 +16,21 @@ export default class Storage<T> {
   }
 
   /*
-   * Returns storage size.
+   * Returns the storage size.
    *
    * @returns {number}
   */
   size() {
     return this.cache.size;
+  }
+
+  /*
+   * Removes all elements from the storage.
+   *
+   * @returns {void}
+  */
+  clear() {
+    this.cache.clear();
   }
 
   /*

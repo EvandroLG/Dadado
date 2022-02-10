@@ -1,8 +1,9 @@
 {
-  "name": "lru-storage",
-  "version": "1.0.0",
+  "name": "the-storage",
+  "version": "0.1.0",
   "main": "dist/index.js",
-  "author": "Evandro Leopoldino Gonçalves <evandrolgoncalves@gmail.com>",
+  "typings": "dist/index.d.ts",
+  "author": "Evandro Leopoldino Goncalves <evandrolgoncalves@gmail.com>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",

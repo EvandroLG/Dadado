@@ -73,9 +73,9 @@ export default class Storage<T> {
       });
     }
 
-    const keys = Array.from(this.cache.keys());
+    if (this.cache.size > this.capacity) {
+      const keys = Array.from(this.cache.keys()).reverse();
 
-    while (this.cache.size > this.capacity) {
       let wasDeleted = false;
 
       if (!this.cache.size) {
@@ -83,7 +83,7 @@ export default class Storage<T> {
       }
 
       while (!wasDeleted && this.cache.size) {
-        const key = keys.shift();
+        const key = keys.pop();
         const item = this.cache.get(key as T) as DataType<T>;
 
         if (!item.persistent) {

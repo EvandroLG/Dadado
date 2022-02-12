@@ -6,7 +6,7 @@ A storage that automatically removes the least-recently-used items.
 - Fast LRU implementation
 - Gzipped version has less than 400 bytes
 - Minimalist API
-- Support to both Node and Browser
+- Supports to both Node and Browser
 - Supports to Types
 - Zero-dependency
 

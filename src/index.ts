@@ -60,7 +60,7 @@ export default class Storage<T> {
    * @param {T} value - The value associated with the key
    * @returns {boolean}
   */
-  setData(key: T, value: T) {
+  setItem(key: T, value: T) {
     if (this.cache.has(key)) {
       const data = this.cache.get(key) as DataType<T>;
       this.cache.delete(key);
@@ -107,7 +107,7 @@ export default class Storage<T> {
    * @param {T} key - The storage key
    * @returns {T}
   */
-  getData(key: T) {
+  getItem(key: T) {
     if (!this.cache.has(key)) {
       return;
     }
@@ -126,7 +126,7 @@ export default class Storage<T> {
    * @param {T} key - The storage key
    * @returns {boolean}
   */
-  removeData(key: T) {
+  removeItem(key: T) {
     return this.cache.delete(key);
   }
 

@@ -35,14 +35,14 @@ import TheStorage from 'the-storage';
 // `capacity` is required and it must to be a posite integer
 const storage = new TheStorage(3);
 
-storage.setData('key1', 'value1');
-storage.setData('key2', 'value2');
-storage.getData('key1'); // 'value1'
-storage.setData('key3', 'value3');
+storage.setItem('key1', 'value1');
+storage.setItem('key2', 'value2');
+storage.getItem('key1'); // 'value1'
+storage.setItem('key3', 'value3');
 
 // At this point, the item associeted with `key2` will be evicted.
 // It happens because the capacity was reached and `key1` was used before `key2`.
-storage.setData('key4', 'value4');
+storage.setItem('key4', 'value4');
 
 storage.size(); // 3
 storage.contains('key2'); // false
@@ -54,35 +54,35 @@ storage.contains('key1'); // true
 ***`contains(key: any): boolean`***<br>
 Checks if the given key exist within the storage
 
-***`setData(key: any, value: any): boolean`***<br>
+***`setItem(key: any, value: any): boolean`***<br>
 Adds the key-value pair to the cache if the key is not in the cache yet.
 Otherwise, if the key exists, updates the value of the key.
 In case the current number of keys exceeds the `capacity`, then it evicts the least recently used key that is not marked as persistent.
 
-***`getData(key: any): any`***<br>
+***`getItem(key: any): any`***<br>
 Retrieves the value associeted with the given key if it exists in the cache.
 If the key is not in the cache, it returns `undefined`.
 
-***`removeData(key: any): boolean`***<br>
+***`removeItem(key: any): boolean`***<br>
 Deletes item and returns `true` if the item existed in the storage - persistent will be removed as well.
 Returns `false` if the element doesn't exist in the storage.
 
 ***`setPersistent(key: any): void`***<br>
 Makes item persistent, i.e the item can no longer be automatically evicted.
-However, the item still will be removed when invoking `removeData` or `clear`.
+However, the item still will be removed when invoking `removeItem` or `clear`.
 
 ```js
 import TheStorage from 'the-storage';
 
 const storage = new TheStorage(3);
-storage.setData('key1', 'value1');
+storage.setItem('key1', 'value1');
 storage.setPersistent('key1');
-storage.setData('key2', 'value2');
-storage.setData('key3', 'value3');
+storage.setItem('key2', 'value2');
+storage.setItem('key3', 'value3');
 
 // At this point the item associeted with `key2` will be evicted
 // since the `key1` is marked as `persistent` and can not be evicted.
-storage.setData('key4', 'value4');
+storage.setItem('key4', 'value4');
 
 storage.contains('key1'); // true
 storage.contains('key2'); // false

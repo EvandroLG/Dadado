@@ -74,8 +74,7 @@ export default class Dadado<T> {
     }
 
     if (this.cache.size > this.capacity) {
-      const keys = Array.from(this.cache.keys()).reverse();
-
+      const keys = this.cache.keys();
       let wasDeleted = false;
 
       if (!this.cache.size) {
@@ -83,7 +82,7 @@ export default class Dadado<T> {
       }
 
       while (!wasDeleted && this.cache.size) {
-        const key = keys.pop();
+        const key = keys.next().value;
         const item = this.cache.get(key as T) as DataType<T>;
 
         if (!item.persistent) {

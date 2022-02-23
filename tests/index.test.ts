@@ -203,4 +203,30 @@ describe('lru', () => {
     expect(cache.getItem(obj)).toBeUndefined();
     expect(cache.getItem(123)).toBeUndefined();
   });
+
+  it('should return an array sorted by least-recently-used', () => {
+    const cache = new Dadado(5);
+    const obj = {};
+    const fn = function () {};
+
+    cache.setItem('data-1', 'value-1');
+    cache.setItem('data-2', 'value-2');
+    cache.setItem(3, 'value-3');
+    cache.setItem(obj, 4);
+    cache.setItem(5, fn);
+
+    cache.getItem(3);
+    cache.getItem('data-2')
+
+
+    const expected = JSON.stringify([
+      ['data-1', 'value-1'],
+      [obj, 4],
+      [5, fn],
+      [3, 'value-3'],
+      ['data-2', 'value-2']
+    ])
+
+    expect(JSON.stringify(cache.toArray())).toBe(expected);
+  });
 });

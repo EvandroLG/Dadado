@@ -166,4 +166,16 @@ export default class Dadado<T> {
       data.persistent = !data.persistent;
     }
   }
+
+  /*
+   * Returns an Array based in the current cache with each key-value pair sorted by least-recently-used
+   *
+   * @returns {T[]}
+  */
+  toArray() {
+    return Array.from(this.cache.entries()).reduce((acc, [key, item]) => {
+      acc.push([key, item.value])
+      return acc;
+    }, [] as T[][]);
+  }
 }

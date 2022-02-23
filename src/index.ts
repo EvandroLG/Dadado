@@ -3,7 +3,7 @@ type DataType<T> = {
   value: T,
 };
 
-export default class Storage<T> {
+export default class Dadado<T> {
   capacity: number;
   private cache: Map<T, DataType<T>>;
 
@@ -24,7 +24,7 @@ export default class Storage<T> {
   }
 
   /*
-   * Returns the storage size.
+   * Returns the cache size.
    *
    * @returns {number}
   */
@@ -33,7 +33,7 @@ export default class Storage<T> {
   }
 
   /*
-   * Removes all elements from the storage.
+   * Removes all elements from the cache.
    *
    * @returns {void}
   */
@@ -42,9 +42,9 @@ export default class Storage<T> {
   }
 
   /*
-   * Checks if the given key exist within the storage.
+   * Checks if the given key exist within the cache.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {boolean}
   */
   contains(key: T) {
@@ -56,7 +56,7 @@ export default class Storage<T> {
    * Otherwise, if the key exists, updates the value of the key.
    * In case the current number of keys exceeds the `capacity`, then it evicts the least recently used key.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @param {T} value - The value associated with the key
    * @returns {boolean}
   */
@@ -104,7 +104,7 @@ export default class Storage<T> {
    * Retrieves the value associated with the given key.
    * If the key is not in the cache, it returns `undefined`.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {T}
   */
   getItem(key: T) {
@@ -123,7 +123,7 @@ export default class Storage<T> {
    * Deletes item and returns true if the item existed in the storage.
    * Returns false if the element doesn't exist.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {boolean}
   */
   removeItem(key: T) {
@@ -133,7 +133,7 @@ export default class Storage<T> {
   /*
    * Makes item persistent, i.e the item can no longer be automatically evicted.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {void}
   */
   setPersistent(key: T) {
@@ -145,7 +145,7 @@ export default class Storage<T> {
   /*
    * Makes item no longer a persistent item if it was one.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {void}
   */
   removePersistent(key: T) {
@@ -157,7 +157,7 @@ export default class Storage<T> {
   /*
    * Makes item persistent if it was not yet, or otherwise undo the persistent flag.
    *
-   * @param {T} key - The storage key
+   * @param {T} key - The cache key
    * @returns {void}
   */
   togglePersistent(key: T) {

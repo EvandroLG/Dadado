@@ -167,9 +167,9 @@ export default class Dadado<T> {
   }
 
   /*
-   * Returns an Array based in the current cache with each key-value pair sorted by least-recently-used
+   * Returns an Array based in the current cache with each key-value pair sorted by least-recently-used.
    *
-   * @returns {T[]}
+   * @returns {T[][]}
   */
   toArray() {
     return Array.from(this.cache.entries()).reduce((acc, [key, item]) => {

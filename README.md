@@ -94,6 +94,9 @@ Makes item no longer a persistent item.
 ***`togglePersistent(key: any): void`***<br>
 Makes item persistent if it was not yet, or otherwise undo the persistent flag.
 
+***`toArray(): T[][]`***<br>
+Returns an Array based in the current cache with each key-value pair sorted by least-recently-used.
+
 ***`size(): number`***<br>
 Returns the cache size.
 

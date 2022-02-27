@@ -1,10 +1,16 @@
 {
-  "name": "the-storage",
-  "version": "0.1.1",
+  "name": "dadado",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "author": "Evandro Leopoldino Goncalves <evandrolgoncalves@gmail.com>",
   "license": "MIT",
+  "keywords": [
+    "cache",
+    "lru",
+    "performance",
+    "memoize"
+  ],
   "scripts": {
     "build": "tsc",
     "prepare": "tsc",

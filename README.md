@@ -1,4 +1,4 @@
-# Dadado &middot; [![build](https://img.shields.io/circleci/build/github/EvandroLG/TheStorage/main.svg?sanitize=true)](https://app.circleci.com/pipelines/github/EvandroLG/TheStorage?branch=main) [![npm](https://img.shields.io/npm/v/the-storage.svg?style=flat)](https://www.npmjs.com/package/the-storage) [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
+# Dadado &middot; [![npm](https://img.shields.io/npm/v/the-storage.svg?style=flat)](https://www.npmjs.com/package/the-storage) [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
 
 A cache that automatically removes the least-recently-used items.
 

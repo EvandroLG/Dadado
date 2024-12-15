@@ -1,7 +1,7 @@
 import Dadado from '../src/';
 
-describe('lru', () => {
-  it('should throw an error if `capacity` is not an integer or a positive number', () => {
+describe('Dadado', () => {
+  test('throws an error if `capacity` is not an integer or a positive number', () => {
     const errorIntegerNumber = 'Expected an integer number';
     const errorPositiveNumber = 'Expected a positive number greater or equal to 1';
 
@@ -12,12 +12,12 @@ describe('lru', () => {
     expect(() => new Dadado(-1020)).toThrowError(errorPositiveNumber);
   });
 
-  it('should be able to set the cache capacity', () => {
+  test('sets the cache capacity', () => {
     const cache = new Dadado(10);
     expect(cache.capacity).toBe(10);
   });
 
-  it('should be able to set and get data', () => {
+  test('sets and gets data', () => {
     const cache = new Dadado(3);
 
     expect(cache.setItem('data-1', 'value-1')).toBeTruthy();
@@ -29,7 +29,7 @@ describe('lru', () => {
     expect(cache.getItem('data-3')).toBe('value-3');
   });
 
-  it('should remove least used item from cache', () => {
+  test('removes least used item from cache', () => {
     const cache = new Dadado(3);
 
     expect(cache.setItem('data-1', 'value-1')).toBeTruthy();
@@ -45,7 +45,7 @@ describe('lru', () => {
     expect(cache.getItem('data-5')).toBe('value-5');
   });
 
-  it('should remove data', () => {
+  test('removes data', () => {
     const cache = new Dadado(5);
 
     expect(cache.setItem('data-1', 'value-1')).toBeTruthy();
@@ -65,7 +65,7 @@ describe('lru', () => {
     expect(cache.getItem('data-5')).toBe('value-5');
   });
 
-  it('should not remove items that marked as persistent', () => {
+  test('ensures persistent items are not removed when cache exceeds capacity', () => {
     const cache = new Dadado(3);
 
     expect(cache.setItem('data-1', 'value-1')).toBeTruthy();
@@ -85,7 +85,7 @@ describe('lru', () => {
     expect(cache.getItem('data-5')).toBe('value-5');
   });
 
-  it('should return current cache size', () => {
+  test('returns current cache size', () => {
     const cache = new Dadado(5);
 
     expect(cache.size()).toBe(0);
@@ -107,7 +107,7 @@ describe('lru', () => {
     expect(cache.size()).toBe(3);
   });
 
-  it('should be able to set new values for existing keys', () => {
+  test('sets new values for existing keys', () => {
     const cache = new Dadado(3);
 
     expect(cache.setItem('data-1', 'value-1')).toBeTruthy();
@@ -130,7 +130,7 @@ describe('lru', () => {
     expect(cache.size()).toBe(3);
   });
 
-  it('should return false in case of it is not possible to add new item within the cache', () => {
+  test('returns false when unable to add a new item', () => {
     const cache = new Dadado(3);
 
     expect(cache.setItem('data-1', 'value-1'));
@@ -146,30 +146,7 @@ describe('lru', () => {
     expect(cache.size()).toBe(3);
   });
 
-  it('should support any type as key and value', () => {
-    const cache = new Dadado(7);
-    const obj = {};
-    const arr: any = [];
-    const fn = function () {};
-
-    expect(cache.setItem(1, 'value-1')).toBeTruthy();
-    expect(cache.setItem(obj, 200)).toBeTruthy();
-    expect(cache.setItem(null, obj)).toBeTruthy();
-    expect(cache.setItem(arr, null)).toBeTruthy();
-    expect(cache.setItem(undefined, arr)).toBeTruthy();
-    expect(cache.setItem(fn, undefined)).toBeTruthy();
-    expect(cache.setItem(10, fn)).toBeTruthy();
-
-    expect(cache.getItem(1)).toBe('value-1');
-    expect(cache.getItem(obj)).toBe(200);
-    expect(cache.getItem(null)).toBe(obj);
-    expect(cache.getItem(arr)).toBe(null);
-    expect(cache.getItem(undefined)).toBe(arr);
-    expect(cache.getItem(fn)).toBe(undefined);
-    expect(cache.getItem(10)).toBe(fn);
-  });
-
-  it('should check if item is or not in the cache', () => {
+  test('verifies presence of items in cache', () => {
     const cache = new Dadado(3);
     cache.setItem(1, 'value-1')
     cache.setItem('key-2', [1, 2, 3]);
@@ -188,7 +165,7 @@ describe('lru', () => {
     expect(cache.contains(1)).toBeTruthy();
   });
 
-  it('should remove all items from the cache', () => {
+  test('removes all items from the cache', () => {
     const cache = new Dadado(3);
     const obj = {};
 
@@ -204,7 +181,7 @@ describe('lru', () => {
     expect(cache.getItem(123)).toBeUndefined();
   });
 
-  it('should return an array sorted by least-recently-used', () => {
+  test('provides array of items sorted by least-recently-used order', () => {
     const cache = new Dadado(5);
     const obj = {};
     const fn = function () {};

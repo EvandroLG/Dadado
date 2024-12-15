@@ -3,7 +3,8 @@ import Dadado from '../src/';
 describe('Dadado', () => {
   test('throws an error if `capacity` is not an integer or a positive number', () => {
     const errorIntegerNumber = 'Expected an integer number';
-    const errorPositiveNumber = 'Expected a positive number greater or equal to 1';
+    const errorPositiveNumber =
+      'Expected a positive number greater or equal to 1';
 
     expect(() => new Dadado(3.3)).toThrowError(errorIntegerNumber);
     expect(() => new Dadado(1222.23)).toThrowError(errorIntegerNumber);
@@ -148,7 +149,7 @@ describe('Dadado', () => {
 
   test('verifies presence of items in cache', () => {
     const cache = new Dadado(3);
-    cache.setItem(1, 'value-1')
+    cache.setItem(1, 'value-1');
     cache.setItem('key-2', [1, 2, 3]);
     cache.setItem(null, [1, 2, 3]);
 
@@ -181,10 +182,12 @@ describe('Dadado', () => {
     expect(cache.getItem(123)).toBeUndefined();
   });
 
-  test('provides array of items sorted by least-recently-used order', () => {
+  test('returns array of items sorted by least-recently-used order', () => {
     const cache = new Dadado(5);
     const obj = {};
-    const fn = function () {};
+    const fn = function () {
+      // Intentionally left empty
+    };
 
     cache.setItem('data-1', 'value-1');
     cache.setItem('data-2', 'value-2');
@@ -193,16 +196,15 @@ describe('Dadado', () => {
     cache.setItem(5, fn);
 
     cache.getItem(3);
-    cache.getItem('data-2')
-
+    cache.getItem('data-2');
 
     const expected = JSON.stringify([
       ['data-1', 'value-1'],
       [obj, 4],
       [5, fn],
       [3, 'value-3'],
-      ['data-2', 'value-2']
-    ])
+      ['data-2', 'value-2'],
+    ]);
 
     expect(JSON.stringify(cache.toArray())).toBe(expected);
   });

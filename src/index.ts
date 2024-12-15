@@ -3,6 +3,7 @@ import { ListNode } from './ListNode';
 type DataType<T> = {
   persistent: boolean;
   value: T;
+  node: ListNode<T>;
 };
 
 /**
@@ -21,11 +22,17 @@ type DataType<T> = {
  * @throws Will throw an error if the capacity is not a positive integer.
  */
 export default class Dadado<T> {
+  /* The maximum number of items that can be in the cache. */
   capacity: number;
+
+  /* The cache to store the key-value pairs. */
   private cache: Map<T, DataType<T>>;
+
+  /* The head of the doubly linked list. */
   private head: ListNode<T> | null = null;
+
+  /* The tail of the doubly linked list. */
   private tail: ListNode<T> | null = null;
-  private nodeMap: Map<T, ListNode<T>>;
 
   /*
    * @param {number} capacity - Defines the maximum of items that can be in the cache
@@ -41,11 +48,17 @@ export default class Dadado<T> {
 
     this.capacity = capacity;
     this.cache = new Map();
-    this.nodeMap = new Map();
   }
 
+  /**
+   * Moves the specified node to the head of the cache, marking it as the most recently used.
+   *
+   * @param {ListNode<T>} node - The node to move to the head of the cache.
+   */
   private moveToHead(node: ListNode<T>) {
-    if (node === this.head) return;
+    if (node === this.head) {
+      return;
+    }
 
     if (node.prev) {
       node.prev.next = node.next;
@@ -68,9 +81,15 @@ export default class Dadado<T> {
 
     this.head = node;
 
-    if (!this.tail) this.tail = node;
+    if (!this.tail) {
+      this.tail = node;
+    }
   }
 
+  /**
+   * Removes the least recently used item from the cache.
+   * If the cache is empty, this method does nothing.
+   */
   private removeTail() {
     if (!this.tail) {
       return;
@@ -78,7 +97,6 @@ export default class Dadado<T> {
 
     const key = this.tail.key;
     this.cache.delete(key);
-    this.nodeMap.delete(key);
 
     if (this.tail.prev) {
       this.tail = this.tail.prev;
@@ -123,19 +141,19 @@ export default class Dadado<T> {
    *
    * @param {T} key - The cache key
    * @param {T} value - The value associated with the key
-   * @returns {boolean}
+   *
+   * @returns {boolean} - Returns `true` if the item was added successfully, otherwise `false`.
    */
   setItem(key: T, value: T) {
     if (this.cache.has(key)) {
       const data = this.cache.get(key) as DataType<T>;
       data.value = value;
-      this.moveToHead(this.nodeMap.get(key) as ListNode<T>);
+      this.moveToHead(data.node);
     } else {
       const newNode = new ListNode(key);
-      const data: DataType<T> = { value, persistent: false };
+      const data: DataType<T> = { value, persistent: false, node: newNode };
 
       this.cache.set(key, data);
-      this.nodeMap.set(key, newNode);
       this.moveToHead(newNode);
 
       while (this.cache.size > this.capacity) {
@@ -158,7 +176,7 @@ export default class Dadado<T> {
    * If the key is not in the cache, it returns `undefined`.
    *
    * @param {T} key - The cache key
-   * @returns {T}
+   * @returns {T} - The value associated with the key, or `undefined` if the key is not in the cache.
    */
   getItem(key: T) {
     if (!this.cache.has(key)) {
@@ -166,7 +184,7 @@ export default class Dadado<T> {
     }
 
     const data = this.cache.get(key) as DataType<T>;
-    this.moveToHead(this.nodeMap.get(key) as ListNode<T>);
+    this.moveToHead(data.node);
 
     return data.value;
   }
@@ -179,26 +197,26 @@ export default class Dadado<T> {
    * @returns {boolean}
    */
   removeItem(key: T) {
-    const node = this.nodeMap.get(key);
+    const node = this.cache.get(key)?.node;
 
-    if (node) {
-      if (node.prev) {
-        node.prev.next = node.next;
-      }
+    if (!node) {
+      return false;
+    }
 
-      if (node.next) {
-        node.next.prev = node.prev;
-      }
+    if (node.prev) {
+      node.prev.next = node.next;
+    }
 
-      if (node === this.head) {
-        this.head = node.next;
-      }
+    if (node.next) {
+      node.next.prev = node.prev;
+    }
 
-      if (node === this.tail) {
-        this.tail = node.prev;
-      }
+    if (node === this.head) {
+      this.head = node.next;
+    }
 
-      this.nodeMap.delete(key);
+    if (node === this.tail) {
+      this.tail = node.prev;
     }
 
     return this.cache.delete(key);

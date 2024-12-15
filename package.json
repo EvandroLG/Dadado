@@ -14,7 +14,12 @@
   "scripts": {
     "build": "tsc",
     "prepare": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write src/*.ts tests/*.ts"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",

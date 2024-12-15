@@ -1,11 +1,31 @@
+import { ListNode } from './ListNode';
+
 type DataType<T> = {
   persistent: boolean,
   value: T,
 };
 
+/**
+ * A generic cache class that automatically removes the least-recently-used items.
+ * 
+ * This class provides a caching solution where the least recently used items are evicted
+ * when the cache reaches its capacity. It supports operations to add, retrieve, and remove
+ * items, as well as to mark items as persistent to prevent their eviction. The cache maintains
+ * the order of usage, allowing efficient access and updates.
+ * 
+ * @template T - The type of the keys and values stored in the cache.
+ * 
+ * @constructor
+ * @param {number} capacity - Defines the maximum number of items that can be in the cache. Must be a positive integer.
+ * 
+ * @throws Will throw an error if the capacity is not a positive integer.
+ */
 export default class Dadado<T> {
   capacity: number;
   private cache: Map<T, DataType<T>>;
+  private head: ListNode<T> | null = null;
+  private tail: ListNode<T> | null = null;
+  private nodeMap: Map<T, ListNode<T>>;
 
   /*
    * @param {number} capacity - Defines the maximum of items that can be in the cache
@@ -21,6 +41,40 @@ export default class Dadado<T> {
 
     this.capacity = capacity;
     this.cache = new Map();
+    this.nodeMap = new Map();
+  }
+
+  private moveToHead(node: ListNode<T>) {
+    if (node === this.head) return;
+
+    // Remove node from its current position
+    if (node.prev) node.prev.next = node.next;
+    if (node.next) node.next.prev = node.prev;
+
+    if (node === this.tail) this.tail = node.prev;
+
+    // Insert node at the head
+    node.next = this.head;
+    node.prev = null;
+    if (this.head) this.head.prev = node;
+    this.head = node;
+
+    if (!this.tail) this.tail = node;
+  }
+
+  private removeTail() {
+    if (!this.tail) return;
+
+    const key = this.tail.key;
+    this.cache.delete(key);
+    this.nodeMap.delete(key);
+
+    if (this.tail.prev) {
+      this.tail = this.tail.prev;
+      this.tail.next = null;
+    } else {
+      this.head = this.tail = null;
+    }
   }
 
   /*
@@ -63,40 +117,28 @@ export default class Dadado<T> {
   setItem(key: T, value: T) {
     if (this.cache.has(key)) {
       const data = this.cache.get(key) as DataType<T>;
-      this.cache.delete(key);
       data.value = value;
-      this.cache.set(key, data);
+      this.moveToHead(this.nodeMap.get(key) as ListNode<T>);
     } else {
-      this.cache.set(key, {
-        value,
-        persistent: false
-      });
-    }
+      const newNode = new ListNode(key);
+      const data: DataType<T> = { value, persistent: false };
+      this.cache.set(key, data);
+      this.nodeMap.set(key, newNode);
+      this.moveToHead(newNode);
 
-    if (this.cache.size > this.capacity) {
-      const keys = this.cache.keys();
-      let wasDeleted = false;
-
-      if (!this.cache.size) {
-        return false;
-      }
-
-      while (!wasDeleted && this.cache.size) {
-        const key = keys.next().value;
-        const item = this.cache.get(key as T) as DataType<T>;
-
-        if (!item.persistent) {
-          wasDeleted = true;
-          this.cache.delete(key as T);
+      while (this.cache.size > this.capacity) {
+        const tailKey = this.tail?.key as T;
+        const tailData = this.cache.get(tailKey) as DataType<T>;
+        if (!tailData.persistent) {
+          this.removeTail();
+        } else {
+          // Move the persistent tail to the head to check the next least recently used item
+          this.moveToHead(this.tail as ListNode<T>);
         }
       }
     }
 
-    if (!this.cache.has(key)) {
-      return false;
-    }
-
-    return true;
+    return this.cache.has(key);
   }
 
   /*
@@ -112,8 +154,7 @@ export default class Dadado<T> {
     }
 
     const data = this.cache.get(key) as DataType<T>;
-    this.cache.delete(key);
-    this.cache.set(key, data);
+    this.moveToHead(this.nodeMap.get(key) as ListNode<T>);
 
     return data.value;
   }
@@ -126,6 +167,16 @@ export default class Dadado<T> {
    * @returns {boolean}
   */
   removeItem(key: T) {
+    const node = this.nodeMap.get(key);
+
+    if (node) {
+      if (node.prev) node.prev.next = node.next;
+      if (node.next) node.next.prev = node.prev;
+      if (node === this.head) this.head = node.next;
+      if (node === this.tail) this.tail = node.prev;
+      this.nodeMap.delete(key);
+    }
+
     return this.cache.delete(key);
   }
 
@@ -166,15 +217,21 @@ export default class Dadado<T> {
     }
   }
 
-  /*
-   * Returns an Array based in the current cache with each key-value pair sorted by least-recently-used.
-   *
-   * @returns {T[][]}
-  */
-  toArray() {
-    return Array.from(this.cache.entries()).reduce((acc, [key, item]) => {
-      acc.push([key, item.value])
-      return acc;
-    }, [] as T[][]);
-  }
+   /*
+    * Returns an Array based in the current cache with each key-value pair sorted by least-recently-used.
+    *
+    * @returns {T[][]}
+   */
+   toArray() {
+     const result: T[][] = [];
+     let current = this.tail;
+
+     while (current) {
+       const data = this.cache.get(current.key) as DataType<T>;
+       result.push([current.key, data.value]);
+       current = current.prev;
+     }
+
+     return result;
+   }
 }

@@ -1,4 +1,4 @@
-# Dadado &middot; [![npm](https://img.shields.io/npm/v/the-storage.svg?style=flat)](https://www.npmjs.com/package/the-storage) [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
+# Dadado &middot; [![npm](https://img.shields.io/npm/v/dadado.svg?style=flat)](https://www.npmjs.com/package/dadado) [![license](https://badgen.now.sh/badge/license/MIT)](./LICENSE)
 
 A cache that automatically removes the least-recently-used items.
 
